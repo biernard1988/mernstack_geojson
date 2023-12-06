@@ -4,12 +4,15 @@ const {
   getProperties,
   createProperty,
   getProperty,
-} = require("../controllers/properties");
+  getPropertyNear,
+} = require("../controllers/properties.js");
 
-const usersProperties = express.Router();
+const propertiesRouter = express.Router();
 
-usersProperties.route("/").get(getProperties).post(createProperty);
+propertiesRouter.route("/").get(getProperties).post(createProperty);
 
-usersProperties.route("/:id").get(getProperty);
+propertiesRouter.route("/:id").get(getProperty);
 
-module.exports = usersProperties;
+propertiesRouter.route("/near-by").get(getPropertyNear);
+
+module.exports = propertiesRouter;

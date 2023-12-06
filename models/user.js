@@ -6,6 +6,9 @@ const userSchema = new Schema({
   phoneNumber: { type: String, required: true, unique: true },
 });
 
+// Create the 2dsphere index on the "location" field
+userSchema.index({ location: "2dsphere" });
+
 const User = model("User", userSchema);
 
 module.exports = User;

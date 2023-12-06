@@ -58,8 +58,43 @@ const getProperty = async (req, res) => {
   }
 };
 
+const getPropertyNear = async (req, res) => {
+  try {
+    const { lng, lat, distance } = req.query;
+
+    // Ensure that all required query parameters are provided
+    if (!lng || !lat || !distance) {
+      return res.status(400).json({ error: "Missing query parameters" });
+    }
+
+    // Convert string values to numbers
+    const longitude = parseFloat(lng);
+    const latitude = parseFloat(lat);
+    const radius = parseInt(distance);
+
+    // Use the $near and $maxDistance operators to find properties within the specified radius
+    const properties = await Property.find({
+      location: {
+        $near: {
+          $geometry: {
+            type: "Point",
+            coordinates: [longitude, latitude],
+          },
+          $maxDistance: radius,
+        },
+      },
+    });
+
+    res.json(properties);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("Ops... Something Went Wrong");
+  }
+};
+
 module.exports = {
   createProperty,
   getProperties,
   getProperty,
+  getPropertyNear,
 };

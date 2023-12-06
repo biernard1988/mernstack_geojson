@@ -15,6 +15,29 @@ const propertySchema = new Schema({
     default: "vacant",
   },
   createdAt: { type: Date, default: Date.now },
+  location: {
+    type: {
+      type: pointSchema,
+      index: "2dsphere",
+      required: true,
+    },
+    coordinates: {
+      type: [Number],
+      required: true,
+    },
+  },
+});
+
+const pointSchema = new Schema({
+  type: {
+    type: String,
+    enum: ["Point"],
+    required: true,
+  },
+  coordinates: {
+    type: [Number],
+    required: true,
+  },
 });
 
 const Property = model("Property", propertySchema);
